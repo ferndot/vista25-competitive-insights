@@ -57,7 +57,7 @@ def run_demo(companies: list[str], days_back: int = 7):
         for article in all_articles[:15]:  # Increased limit
             try:
                 # Extract signal
-                signal = detector.extract(company, article.text)
+                signal = detector.extract(company, article.text, article.source_type)
 
                 if signal:
                     # Track source statistics
