@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
-from models.model import DataSourceItem
+from models.model import Result
 
 
 class DataSource(ABC):
@@ -15,7 +15,7 @@ class DataSource(ABC):
         }
     
     @abstractmethod
-    def fetch(self, company_name: str, days_back: int = 7) -> list[DataSourceItem]:
+    def fetch(self, company_name: str, days_back: int = 7) -> list[Result]:
         """Fetch data from the source"""
         pass
     

@@ -3,7 +3,7 @@ from loguru import logger
 from data.base import DataSource
 from data.google_news import GoogleNewsSource
 from core.config import settings
-from models.model import DataSourceItem
+from models.model import Result
 
 
 class NewsFetcher:
@@ -14,7 +14,7 @@ class NewsFetcher:
             "google_news": GoogleNewsSource(),
         }
 
-    def fetch_from_source(self, source_name: str, company_name: str, days_back: int = 7) -> list[DataSourceItem]:
+    def fetch_from_source(self, source_name: str, company_name: str, days_back: int = 7) -> list[Result]:
         """Fetch data from a specific source"""
         if source_name not in self.sources:
             logger.error(f"Unknown source: {source_name}")
@@ -27,7 +27,7 @@ class NewsFetcher:
         company_name: str, 
         days_back: int = 7, 
         sources: list[str] | None = None
-    ) -> list[DataSourceItem]:
+    ) -> list[Result]:
         """Fetch from multiple sources and deduplicate"""
 
         if sources is None:
@@ -65,7 +65,7 @@ class NewsFetcher:
         if name in self.sources:
             del self.sources[name]
 
-    def _deduplicate_articles(self, articles: list[DataSourceItem]) -> list[DataSourceItem]:
+    def _deduplicate_articles(self, articles: list[Result]) -> list[Result]:
         """Remove duplicate articles based on title similarity"""
 
         seen_titles = set()

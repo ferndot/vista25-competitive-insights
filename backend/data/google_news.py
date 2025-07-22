@@ -5,7 +5,7 @@ from urllib.parse import quote_plus
 import feedparser
 from loguru import logger
 
-from models.model import DataSourceItem, SourceType
+from models.model import Result, SourceType
 from .base import DataSource
 
 
@@ -18,7 +18,7 @@ class GoogleNewsSource(DataSource):
     def __init__(self):
         super().__init__()
     
-    def fetch(self, company_name: str, days_back: int = 7) -> list[DataSourceItem]:
+    def fetch(self, company_name: str, days_back: int = 7) -> list[Result]:
         """Fetch recent news for a company from Google News RSS"""
 
         # Build search query with relevant business signals
@@ -85,7 +85,7 @@ class GoogleNewsSource(DataSource):
                 # Extract clean text from summary
                 summary = self._clean_html(entry.get("summary", ""))
 
-                article = DataSourceItem(
+                article = Result(
                     title=entry.get("title", "No title"),
                     link=entry.get("link", ""),
                     published=entry.get("published", "Unknown date"),

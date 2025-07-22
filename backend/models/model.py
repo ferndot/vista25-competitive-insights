@@ -34,7 +34,7 @@ class SourceType(str, Enum):
     )
 
 
-class DataSourceItem(BaseModel):
+class Result(BaseModel):
     """Standard data structure returned by all data sources"""
     
     title: str = Field(description="Article/post title")

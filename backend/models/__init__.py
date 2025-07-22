@@ -4,6 +4,6 @@ from .model import (
     SignalType, 
     ImpactLevel, 
     Confidence,
-    DataSourceItem,
+    Result,
     SourceType
 )
