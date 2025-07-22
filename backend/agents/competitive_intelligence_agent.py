@@ -189,7 +189,6 @@ class CompetitiveIntelligenceAgent:
                             "company_name": current_company,
                             "source_url": article["link"],
                             "detected_at": datetime.now().isoformat(),
-                            "article_date": article.get("published_on")
                         })
                         
                         extracted_signals.append(signal_dict)
