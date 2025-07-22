@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from utils import azure_chat_model
 
 load_dotenv()
-from models.model import (
+from models.signal import (
     Signal,
     SignalWithMetadata,
     SignalType,

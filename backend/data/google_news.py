@@ -5,7 +5,7 @@ from urllib.parse import quote_plus
 import feedparser
 from loguru import logger
 
-from models.model import Result, SourceType
+from models.data_source import Result, SourceType
 from .base import DataSource
 
 

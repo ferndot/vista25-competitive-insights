@@ -4,7 +4,7 @@ import pytest
 from datetime import datetime
 
 from agents.signal_detector import SignalDetector
-from models.model import SignalType, ImpactLevel, Confidence
+from models.signal import SignalType, ImpactLevel, Confidence
 
 # Load environment variables
 load_dotenv()

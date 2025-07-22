@@ -2,17 +2,14 @@ services:
   backend:
     build:
       dockerfile: Dockerfile.backend
-    ports:
-      - "8000:8000"
     volumes:
       - ./backend:/app
       - ./pyproject.toml:/pyproject.toml
       - ./uv.lock:/uv.lock
     environment:
       - ENVIRONMENT=development
-      - ALLOWED_ORIGINS=["http://localhost:3000"]
     env_file: ".env"
-    command: uv run uvicorn main:app --host=0.0.0.0 --port=8000 --reload
+    command: uv run python run_agent.py --quick
 
   frontend:
     build:

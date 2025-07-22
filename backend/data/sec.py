@@ -4,9 +4,9 @@ Fixed SEC data source integration with Result model
 
 from typing import List, Dict, Optional
 from datetime import datetime, timedelta
+from models.data_source import Result, SourceType
 from data.base import DataSource
-from data.sec_fetcher import SECFetcher
-from models.model import Result, SourceType
+from services.sec_fetcher import SECFetcher
 import re
 from loguru import logger
 
