@@ -85,7 +85,6 @@ class SignalType(str, Enum):
         "No actionable signal detected",
     )
 
-
 class ImpactLevel(str, Enum):
     """Impact level with guidance for CSM prioritization"""
 
@@ -97,15 +96,15 @@ class ImpactLevel(str, Enum):
 
     high = (
         "high",
-        "Immediate action required within 48 hours",
+        "A direct, urgent threat to the account (e.g., acquisition, exec sponsor leaves) or a major, time-sensitive opportunity.",
     )
     medium = (
         "medium",
-        "Action required within 1 week",
+        "A significant event that requires a strategic response but is not an immediate emergency (e.g., funding round, new partnership).",
     )
     low = (
         "low",
-        "Monitor and mention in next regular check-in",
+        "An informational item providing context; good to know but does not require proactive outreach (e.g., mention in next check-in).",
     )
 
 
