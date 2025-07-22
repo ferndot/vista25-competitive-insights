@@ -1,6 +1,5 @@
 import os
 
-from datetime import datetime
 from dotenv import load_dotenv
 
 from utils import azure_chat_model
@@ -65,6 +64,7 @@ class SignalDetector:
         self,
         company_name: str,
         text: str,
+        source: str | None = None,
         source_url: str | None = None,
     ) -> SignalWithMetadata | None:
         """Extract signal and add metadata"""
@@ -76,6 +76,7 @@ class SignalDetector:
         return SignalWithMetadata(
             **signal.dict(),
             company_name=company_name,
+            source=source,
             source_url=source_url,
         )
 
