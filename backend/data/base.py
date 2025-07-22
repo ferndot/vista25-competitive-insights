@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from bs4 import BeautifulSoup
-from models.data_source import Result
+from models.model import Result
 
 
 class DataSource(ABC):
