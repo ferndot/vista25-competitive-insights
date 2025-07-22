@@ -174,7 +174,7 @@ class SECFilingsSource(DataSource):
                 link=filing.get('link', ''),
                 published=filing.get('published', ''),
                 published_on=filing_date,
-                source_type=SourceType.regulatory,  # SEC is regulatory source
+                source=SourceType.regulatory,  # SEC is regulatory source
                 text=enhanced_text,
                 platform=self.platform_id,
                 platform_name=self.platform_name
@@ -257,5 +257,5 @@ if __name__ == "__main__":
     for result in results[:3]:
         print(f"\n📄 {result.title}")
         print(f"   Date: {result.published_on}")
-        print(f"   Source Type: {result.source_type.value}")
+        print(f"   Source Type: {result.source.value}")
         print(f"   Platform: {result.platform_name}")

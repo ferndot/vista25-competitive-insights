@@ -148,7 +148,7 @@ class CompetitiveIntelligenceAgent:
                     "published": article.published,
                     "published_on": article.published_on.isoformat() if article.published_on else None,
                     "platform_name": article.platform_name,
-                    "source_type": article.source_type.value
+                    "source": article.source.value
                 })
             
             state["fetched_articles"][current_company] = article_dicts

@@ -49,7 +49,7 @@ def fetch_company_news(params: NewsQueryParams) -> Dict[str, Any]:
                 "published": article.published,
                 "published_on": article.published_on.isoformat() if article.published_on else None,
                 "platform_name": article.platform_name,
-                "source_type": article.source_type.value,
+                "source": article.source.value,
                 "relevance_score": len([word for word in params.company_name.lower().split() 
                                        if word in article.text.lower()]) / len(params.company_name.split())
             })

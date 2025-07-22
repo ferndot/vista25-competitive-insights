@@ -45,7 +45,7 @@ class Result(BaseModel):
     link: str = Field(description="URL to the original content")
     published: str = Field(description="Original publication date string")
     published_on: datetime = Field(description="Parsed publication datetime")
-    source_type: SourceType = Field(description="Type of content source")
+    source: SourceType = Field(description="Type of content source")
     text: str = Field(description="Full text content for signal extraction")
     platform: str = Field(description="Platform identifier (e.g., 'google_news', 'twitter')")
     platform_name: str = Field(description="Human-readable platform name (e.g., 'Google News', 'Twitter')")

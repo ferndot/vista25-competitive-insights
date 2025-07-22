@@ -90,7 +90,7 @@ class GoogleNewsSource(DataSource):
                     link=entry.get("link", ""),
                     published=entry.get("published", "Unknown date"),
                     published_on=pub_date,
-                    source_type=SourceType.news,
+                    source=SourceType.news,
                     text=f"{entry.get('title', '')}. {summary}",
                     platform=self.platform_id,
                     platform_name=self.platform_name
