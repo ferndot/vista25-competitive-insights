@@ -171,7 +171,7 @@ class ResultDeduplicator:
         overlap_ratio = len(intersection) / len(union) if union else 0
         
         # Consider similar if >30% overlap
-        return overlap_ratio > 0.3
+        return overlap_ratio > 0.2
 
     def _compare_results(self, result1: Result, result2: Result) -> bool:
         """
@@ -189,7 +189,7 @@ class ResultDeduplicator:
                         f"(confidence: {result.confidence:.2f}) - {result.reason}")
             
             # Consider it a duplicate if confidence is high enough
-            return result.is_duplicate and result.confidence >= 0.7
+            return result.is_duplicate and result.confidence >= 0.6
             
         except Exception as e:
             logger.error(f"Error comparing results: {e}")
