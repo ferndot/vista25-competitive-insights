@@ -119,7 +119,6 @@ def batch_analyze_articles(company_name: str, articles: List[Dict], confidence_t
                             "source_url": article.get("link"),
                             "detected_at": datetime.now().isoformat(),
                             "article_title": article.get("title", ""),
-                            "article_date": article.get("published_on")
                         })
                         
                         signals_found.append(signal_dict)

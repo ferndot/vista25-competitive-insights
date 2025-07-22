@@ -129,4 +129,3 @@ class SignalWithMetadata(Signal):
     company_name: str
     source_url: str | None = None
     detected_at: datetime = Field(default_factory=datetime.now)
-    article_date: datetime | None = None

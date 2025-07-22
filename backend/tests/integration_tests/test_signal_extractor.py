@@ -142,15 +142,11 @@ class TestSignalDetector:
             "TechCorp",
             text,
             source_url="https://example.com/article",
-            article_date="2024-01-15",
         )
 
         assert signal is not None
         assert signal.company_name == "TechCorp"
         assert signal.source_url == "https://example.com/article"
-        assert signal.article_date.year == 2024
-        assert signal.article_date.month == 1
-        assert signal.article_date.day == 15
 
     @pytest.mark.parametrize(
         "company,text,expected_type",

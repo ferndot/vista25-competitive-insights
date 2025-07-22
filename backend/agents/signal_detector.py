@@ -66,7 +66,6 @@ class SignalDetector:
         company_name: str,
         text: str,
         source_url: str | None = None,
-        article_date: str | None = None,
     ) -> SignalWithMetadata | None:
         """Extract signal and add metadata"""
 
@@ -74,19 +73,10 @@ class SignalDetector:
         if not signal:
             return None
 
-        # Convert article_date string to datetime if provided
-        article_datetime = None
-        if article_date:
-            try:
-                article_datetime = datetime.fromisoformat(article_date)
-            except:
-                pass
-
         return SignalWithMetadata(
             **signal.dict(),
             company_name=company_name,
             source_url=source_url,
-            article_date=article_datetime,
         )
 
 
