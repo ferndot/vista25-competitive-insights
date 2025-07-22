@@ -19,34 +19,40 @@ class SignalDetector:
     """Extracts business signals from text using structured LLM output"""
 
     def __init__(self, api_key: str, model: str = "gpt-4.1"):
-        # self.llm = ChatOpenAI(
-        #     model=model,
-        #     temperature=0.1,
-        #     api_key=api_key
-        # ).with_structured_output(Signal)
         self.llm = azure_chat_model().with_structured_output(Signal)
 
-    def extract(self, company_name: str, text: str) -> Signal | None:
-        """Extract signal from text about a company"""
-
+    def extract(self, company_name: str, text: str, source_type: str) -> Signal | None:
+        """Extract signal from text about a company, using source-specific context."""
         prompt = f"""
-        Analyze this text about {company_name} and extract business signals.
+You are an expert financial analyst identifying significant business signals from text.
+Analyze the following text about {company_name} from a '{source_type}' source and extract one key business signal.
 
-        Text: {text}
+**Text to Analyze:**
+---
+{text}
+---
 
-        Signal Types:
-        {chr(10).join(f"- {st.value}: {st.description}" for st in SignalType)}
+**Instructions & Context:**
+1.  **Identify the Core Signal**: What is the single most important event? (e.g., executive departure, new funding, acquisition, financial results).
+2.  **Consider the Source**:
+    * If the source is 'news', focus on the main event reported.
+    * If the source is 'regulatory' (like an SEC filing), pay close attention to the filing type (e.g., 8-K, 10-K) and specific "Items" mentioned. An 8-K Item 5.02, for example, is a mandatory report of a leadership change.
+3.  **Define an Action**: Suggest a concrete next step a business team (like Sales or Customer Success) could take.
+4.  **Be Specific**: The title should be specific (e.g., "CFO John Doe Departs," not "Leadership Change"). Extract any person or monetary amount.
+5.  **No Signal**: If the text has no clear, significant business event, you MUST use the signal type 'none'.
 
-        Impact Levels:
-        {chr(10).join(f"- {il.value}: {il.description}" for il in ImpactLevel)}
+**Structured Output Definitions:**
+Signal Types:
+{chr(10).join(f"- {st.value}: {st.description}" for st in SignalType)}
 
-        Confidence Levels:
-        {chr(10).join(f"- {c.value}: {c.description}" for c in Confidence)}
+Impact Levels:
+{chr(10).join(f"- {il.value}: {il.description}" for il in ImpactLevel)}
 
-        Focus on actionable intelligence for Customer Success.
-        If no clear signal exists, use type 'none'.
-        Make the title specific and the action concrete with a clear timeline.
-        """
+Confidence Levels:
+{chr(10).join(f"- {c.value}: {c.description}" for c in Confidence)}
+
+Extract the signal based on your analysis.
+"""
 
         try:
             signal = self.llm.invoke(prompt)
@@ -70,7 +76,7 @@ class SignalDetector:
     ) -> SignalWithMetadata | None:
         """Extract signal and add metadata"""
 
-        signal = self.extract(company_name, text)
+        signal = self.extract(company_name, text, )
         if not signal:
             return None
 
@@ -83,14 +89,13 @@ class SignalDetector:
                 pass
 
         return SignalWithMetadata(
-            **signal.dict(),
+            **signal.model_dump(),
             company_name=company_name,
             source_url=source_url,
             article_date=article_datetime,
         )
 
 
-# Quick test
 if __name__ == "__main__":
     detector = SignalDetector(api_key=os.environ["OPENAI_API_KEY"])
 
