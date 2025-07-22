@@ -30,8 +30,8 @@ def generate_insights_summary(signals: List[Dict], companies: List[str]) -> Dict
         
         # Categorize signals
         for signal in signals:
-            # By type
-            signal_type = signal.get("type", "unknown")
+            # By signal_type
+            signal_type = signal.get("signal_type", "unknown")
             signal_analysis["signal_types"][signal_type] = signal_analysis["signal_types"].get(signal_type, 0) + 1
             
             # By impact
@@ -65,7 +65,7 @@ def generate_insights_summary(signals: List[Dict], companies: List[str]) -> Dict
             })
         
         # Leadership change recommendations
-        leadership_signals = [s for s in signals if s.get("type") == "leadership"]
+        leadership_signals = [s for s in signals if s.get("signal_type") == "leadership"]
         if leadership_signals:
             recommendations.append({
                 "priority": "high",
@@ -74,7 +74,7 @@ def generate_insights_summary(signals: List[Dict], companies: List[str]) -> Dict
             })
         
         # Funding opportunity recommendations
-        funding_signals = [s for s in signals if s.get("type") == "funding"]
+        funding_signals = [s for s in signals if s.get("signal_type") == "funding"]
         if funding_signals:
             recommendations.append({
                 "priority": "medium",

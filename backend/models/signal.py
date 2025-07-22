@@ -96,8 +96,8 @@ class Signal(BaseModel):
     """Core signal extracted from news/data sources"""
 
     # Core classification
-    type: SignalType = Field(
-        description="Primary signal type - choose the most relevant category"
+    signal_type: SignalType = Field(
+        description="Primary signal signal_type - choose the most relevant category"
     )
 
     impact: ImpactLevel = Field(description="Business impact level for prioritization")

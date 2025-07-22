@@ -47,7 +47,7 @@ def assess_company_priority(
             priority_factors.append(f"Market tier: {market_cap_tier}")
         
         # Factor 4: Signal diversity
-        signal_types = set(s.get("type") for s in recent_signals if s.get("type"))
+        signal_types = set(s.get("signal_type") for s in recent_signals if s.get("signal_type"))
         if len(signal_types) > 2:
             priority_score += 3
             priority_factors.append(f"Multiple signal types: {len(signal_types)}")

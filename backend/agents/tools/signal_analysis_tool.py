@@ -67,7 +67,7 @@ def analyze_article_for_signals(params: SignalAnalysisParams) -> Dict[str, Any]:
             "company": params.company_name,
             "signal": signal_dict,
             "impact_level": signal.impact.value,
-            "signal_type": signal.type.value,
+            "signal_type": signal.signal_type.value,
             "confidence": signal.confidence.value
         }
         

@@ -34,7 +34,7 @@ class TestSignalDetector:
         signal = detector.extract("Acme Corp", text)
 
         assert signal is not None
-        assert signal.type == SignalType.leadership
+        assert signal.signal_type == SignalType.leadership
         assert signal.impact == ImpactLevel.high
         assert signal.confidence in [Confidence.high, Confidence.medium]
         assert "John Smith" in signal.person
@@ -53,7 +53,7 @@ class TestSignalDetector:
         signal = detector.extract("TechStartup Inc", text)
 
         assert signal is not None
-        assert signal.type == SignalType.funding
+        assert signal.signal_type == SignalType.funding
         assert signal.impact in [ImpactLevel.high, ImpactLevel.medium]
         assert signal.amount == "$50M" or "$50 million" in signal.amount
         # Fixed: Check for any of these keywords in the action
@@ -74,7 +74,7 @@ class TestSignalDetector:
         signal = detector.extract("CloudStartup", text)
 
         assert signal is not None
-        assert signal.type == SignalType.acquisition
+        assert signal.signal_type == SignalType.acquisition
         assert signal.impact == ImpactLevel.high
         assert "$2.3" in signal.amount or "2.3 billion" in signal.amount
 
@@ -89,7 +89,7 @@ class TestSignalDetector:
         signal = detector.extract("TechCo", text)
 
         assert signal is not None
-        assert signal.type == SignalType.layoffs
+        assert signal.signal_type == SignalType.layoffs
         assert signal.impact == ImpactLevel.high
         assert "budget" in signal.action.lower() or "check" in signal.action.lower()
 
@@ -129,7 +129,7 @@ class TestSignalDetector:
         signal = detector.extract("Acme Corp", text)
 
         assert signal is not None
-        assert signal.type == SignalType.partnership
+        assert signal.signal_type == SignalType.partnership
         assert "Microsoft" in signal.title or "Microsoft" in signal.action
 
     def test_with_metadata(self, detector):
@@ -170,7 +170,7 @@ class TestSignalDetector:
         signal = detector.extract(company, text)
 
         assert signal is not None
-        assert signal.type == expected_type
+        assert signal.signal_type == expected_type
         assert signal.confidence in [Confidence.high, Confidence.medium]
 
     def test_product_expansion_vs_no_signal(self, detector):
@@ -184,7 +184,7 @@ class TestSignalDetector:
 
         signal = detector.extract("Acme Corp", expansion_text)
         assert signal is not None
-        assert signal.type == SignalType.expansion
+        assert signal.signal_type == SignalType.expansion
 
         # This should NOT be detected as a meaningful signal
         routine_text = """

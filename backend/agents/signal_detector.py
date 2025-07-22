@@ -44,7 +44,7 @@ class SignalDetector:
         {chr(10).join(f"- {c.value}: {c.description}" for c in Confidence)}
 
         Focus on actionable intelligence for Customer Success.
-        If no clear signal exists, use type 'none'.
+        If no clear signal exists, use signal_type 'none'.
         Make the title specific and the action concrete with a clear timeline.
         """
 
@@ -52,7 +52,7 @@ class SignalDetector:
             signal = self.llm.invoke(prompt)
 
             # Filter out low-confidence or no-signal results
-            if signal.type == SignalType.none or signal.confidence == Confidence.low:
+            if signal.signal_type == SignalType.none or signal.confidence == Confidence.low:
                 return None
 
             return signal
@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
     signal = detector.extract("Acme Corp", test_text)
     if signal:
-        print(f"Type: {signal.type}")
+        print(f"Type: {signal.signal_type}")
         print(f"Impact: {signal.impact}")
         print(f"Title: {signal.title}")
         print(f"Action: {signal.action}")

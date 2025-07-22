@@ -191,7 +191,7 @@ class SECFilingsSource(DataSource):
         return results
 
     def _detect_filing_type(self, title: str) -> tuple[str, Dict]:
-        """Detect filing type and return associated metadata"""
+        """Detect filing signal_type and return associated metadata"""
 
         for filing_type, info in self.FILING_SIGNAL_MAP.items():
             if re.search(info['pattern'], title, re.IGNORECASE):

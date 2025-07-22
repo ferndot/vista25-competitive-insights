@@ -254,12 +254,12 @@ class CompetitiveIntelligenceAgent:
             total_signals = state.get("total_signals", 0)
             extracted_signals = state.get("extracted_signals", [])
             
-            # Group signals by type for summary
+            # Group signals by signal_type for summary
             signals_by_type = {}
             signals_by_company = {}
             
             for signal in extracted_signals:
-                signal_type = signal.get("type", "unknown")
+                signal_type = signal.get("signal_type", "unknown")
                 company = signal.get("company_name", "unknown")
                 
                 if signal_type not in signals_by_type:
@@ -282,7 +282,7 @@ class CompetitiveIntelligenceAgent:
             {chr(10).join(f"- {sig_type}: {len(signals)} signals" for sig_type, signals in signals_by_type.items())}
             
             High-Impact Signals:
-            {chr(10).join(f"- {sig['company_name']}: {sig['title']} ({sig['type']})" for sig in extracted_signals if sig.get('impact') == 'high')[:5]}
+            {chr(10).join(f"- {sig['company_name']}: {sig['title']} ({sig['signal_type']})" for sig in extracted_signals if sig.get('impact') == 'high')[:5]}
             
             Provide:
             1. Key strategic insights from these signals
@@ -316,7 +316,7 @@ class CompetitiveIntelligenceAgent:
                 "signals_by_company": {
                     company: {
                         "count": len(signals),
-                        "types": list(set(s["type"] for s in signals)),
+                        "types": list(set(s["signal_type"] for s in signals)),
                         "high_impact_count": len([s for s in signals if s.get("impact") == "high"])
                     }
                     for company, signals in signals_by_company.items()
@@ -325,7 +325,7 @@ class CompetitiveIntelligenceAgent:
                 "high_impact_signals": [
                     {
                         "company": s["company_name"],
-                        "type": s["type"],
+                        "signal_type": s["signal_type"],
                         "title": s["title"],
                         "action": s["action"],
                         "impact": s["impact"]
