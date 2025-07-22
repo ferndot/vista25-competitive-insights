@@ -116,6 +116,7 @@ def batch_analyze_articles(company_name: str, articles: List[Dict], confidence_t
                         signal_dict = signal.dict()
                         signal_dict.update({
                             "company_name": company_name,
+                            "source": article.get("source"),
                             "source_url": article.get("link"),
                             "detected_at": datetime.now().isoformat(),
                             "article_title": article.get("title", ""),

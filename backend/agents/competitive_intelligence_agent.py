@@ -187,6 +187,7 @@ class CompetitiveIntelligenceAgent:
                         signal_dict = signal.dict()
                         signal_dict.update({
                             "company_name": current_company,
+                            "source": article["source"],
                             "source_url": article["link"],
                             "detected_at": datetime.now().isoformat(),
                         })
