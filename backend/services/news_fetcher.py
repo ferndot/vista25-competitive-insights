@@ -1,31 +1,31 @@
+from typing import List
+
 from loguru import logger
 
 from data.base import DataSource
 from data.google_news import GoogleNewsSource
-from core.config import settings
 from models.model import Result
 
 
 class NewsFetcher:
     """Main class that orchestrates multiple data sources"""
 
-    def __init__(self):
-        self.sources = {
-            "google_news": GoogleNewsSource(),
-        }
+    def __init__(self, sources_list: List[DataSource]= None):
+        sources_list = sources_list or [GoogleNewsSource()]
+        self.sources = { src.platform_id:src for src in sources_list}
 
-    def fetch_from_source(self, source_name: str, company_name: str, days_back: int = 7) -> list[Result]:
+    def fetch_from_source(self, platform_id: str, company_name: str, days_back: int = 7) -> list[Result]:
         """Fetch data from a specific source"""
-        if source_name not in self.sources:
-            logger.error(f"Unknown source: {source_name}")
+        if platform_id not in self.sources:
+            logger.error(f"Unknown source: {platform_id}")
             return []
         
-        return self.sources[source_name].fetch(company_name, days_back)
+        return self.sources[platform_id].fetch(company_name, days_back)
 
     def fetch_multiple_sources(
-        self, 
-        company_name: str, 
-        days_back: int = 7, 
+        self,
+        company_name: str,
+        days_back: int = 7,
         sources: list[str] | None = None
     ) -> list[Result]:
         """Fetch from multiple sources and deduplicate"""
@@ -46,9 +46,9 @@ class NewsFetcher:
         unique_articles = self._deduplicate_articles(all_articles)
 
         # Sort by date, newest first
-        unique_articles.sort(
-            key=lambda x: x.published_on, reverse=True
-        )
+        # unique_articles.sort(
+        #     key=lambda x: x.published_on, reverse=True
+        # )
 
         return unique_articles
 
