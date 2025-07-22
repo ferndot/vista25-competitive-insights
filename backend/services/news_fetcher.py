@@ -5,7 +5,7 @@ from loguru import logger
 from data.base import DataSource
 from data.google_news import GoogleNewsSource
 from data.sec import SECFilingsSource
-from core.config import settings
+from models.config import settings
 from models.data_source import Result
 
 
