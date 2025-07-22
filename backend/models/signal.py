@@ -127,5 +127,6 @@ class SignalWithMetadata(Signal):
     """Signal with additional metadata for storage/display"""
 
     company_name: str
+    source: str | None = None
     source_url: str | None = None
     detected_at: datetime = Field(default_factory=datetime.now)
