@@ -1,12 +1,11 @@
 import os
 
-from datetime import datetime
 from dotenv import load_dotenv
 
 from utils import azure_chat_model
 
 load_dotenv()
-from models.model import (
+from models.signal import (
     Signal,
     SignalWithMetadata,
     SignalType,
@@ -44,7 +43,7 @@ class SignalDetector:
         {chr(10).join(f"- {c.value}: {c.description}" for c in Confidence)}
 
         Focus on actionable intelligence for Customer Success.
-        If no clear signal exists, use type 'none'.
+        If no clear signal exists, use signal_type 'none'.
         Make the title specific and the action concrete with a clear timeline.
         """
 
@@ -52,7 +51,7 @@ class SignalDetector:
             signal = self.llm.invoke(prompt)
 
             # Filter out low-confidence or no-signal results
-            if signal.type == SignalType.none or signal.confidence == Confidence.low:
+            if signal.signal_type == SignalType.none or signal.confidence == Confidence.low:
                 return None
 
             return signal
@@ -65,8 +64,8 @@ class SignalDetector:
         self,
         company_name: str,
         text: str,
+        source: str | None = None,
         source_url: str | None = None,
-        article_date: str | None = None,
     ) -> SignalWithMetadata | None:
         """Extract signal and add metadata"""
 
@@ -74,19 +73,11 @@ class SignalDetector:
         if not signal:
             return None
 
-        # Convert article_date string to datetime if provided
-        article_datetime = None
-        if article_date:
-            try:
-                article_datetime = datetime.fromisoformat(article_date)
-            except:
-                pass
-
         return SignalWithMetadata(
             **signal.dict(),
             company_name=company_name,
+            source=source,
             source_url=source_url,
-            article_date=article_datetime,
         )
 
 
@@ -101,7 +92,7 @@ if __name__ == "__main__":
 
     signal = detector.extract("Acme Corp", test_text)
     if signal:
-        print(f"Type: {signal.type}")
+        print(f"Type: {signal.signal_type}")
         print(f"Impact: {signal.impact}")
         print(f"Title: {signal.title}")
         print(f"Action: {signal.action}")

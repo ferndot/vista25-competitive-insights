@@ -4,9 +4,9 @@ Fixed SEC data source integration with Result model
 
 from typing import List, Dict, Optional
 from datetime import datetime, timedelta
+from models.data_source import Result, SourceType
 from data.base import DataSource
-from data.sec_fetcher import SECFetcher
-from models.model import Result, SourceType
+from services.sec_fetcher import SECFetcher
 import re
 from loguru import logger
 
@@ -174,7 +174,7 @@ class SECFilingsSource(DataSource):
                 link=filing.get('link', ''),
                 published=filing.get('published', ''),
                 published_on=filing_date,
-                source_type=SourceType.regulatory,  # SEC is regulatory source
+                source=SourceType.regulatory,  # SEC is regulatory source
                 text=enhanced_text,
                 platform=self.platform_id,
                 platform_name=self.platform_name
@@ -191,7 +191,7 @@ class SECFilingsSource(DataSource):
         return results
 
     def _detect_filing_type(self, title: str) -> tuple[str, Dict]:
-        """Detect filing type and return associated metadata"""
+        """Detect filing signal_type and return associated metadata"""
 
         for filing_type, info in self.FILING_SIGNAL_MAP.items():
             if re.search(info['pattern'], title, re.IGNORECASE):
@@ -257,5 +257,5 @@ if __name__ == "__main__":
     for result in results[:3]:
         print(f"\n📄 {result.title}")
         print(f"   Date: {result.published_on}")
-        print(f"   Source Type: {result.source_type.value}")
+        print(f"   Source Type: {result.source.value}")
         print(f"   Platform: {result.platform_name}")

@@ -5,7 +5,7 @@ from urllib.parse import quote_plus
 import feedparser
 from loguru import logger
 
-from models.model import Result, SourceType
+from models.data_source import Result, SourceType
 from .base import DataSource
 
 
@@ -90,7 +90,7 @@ class GoogleNewsSource(DataSource):
                     link=entry.get("link", ""),
                     published=entry.get("published", "Unknown date"),
                     published_on=pub_date,
-                    source_type=SourceType.news,
+                    source=SourceType.news,
                     text=f"{entry.get('title', '')}. {summary}",
                     platform=self.platform_id,
                     platform_name=self.platform_name

@@ -1,9 +1,13 @@
+"""
+Configuration models for competitive intelligence system
+"""
+
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    ALLOWED_ORIGINS: list[str]
+    """Application settings model"""
     SUPABASE_URL: str
     SUPABASE_KEY: str
     OPENAI_API_KEY: str

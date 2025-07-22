@@ -4,14 +4,16 @@ from loguru import logger
 
 from data.base import DataSource
 from data.google_news import GoogleNewsSource
-from models.model import Result
+from data.sec import SECFilingsSource
+from models.config import settings
+from models.data_source import Result
 
 
 class NewsFetcher:
     """Main class that orchestrates multiple data sources"""
 
     def __init__(self, sources_list: List[DataSource]= None):
-        sources_list = sources_list or [GoogleNewsSource()]
+        sources_list = sources_list or [GoogleNewsSource(), SECFilingsSource()]
         self.sources = { src.platform_id:src for src in sources_list}
 
     def fetch_from_source(self, platform_id: str, company_name: str, days_back: int = 7) -> list[Result]:
@@ -99,7 +101,7 @@ if __name__ == "__main__":
         google_articles = fetcher.fetch_from_source("google_news", company, days_back=3)
         for article in google_articles[:3]:
             print(f"📰 {article.title[:80]}...")
-            print(f"   Platform: {article.platform_name} | Type: {article.source_type}")
+            print(f"   Platform: {article.platform_name} | Type: {article.source}")
 
         # Test combined sources
         print(f"\n--- All Sources Combined ---")
@@ -112,6 +114,6 @@ if __name__ == "__main__":
         print(f"Total articles found: {len(all_articles)}")
         for article in all_articles[:5]:
             print(f"📄 {article.title[:80]}...")
-            print(f"   Platform: {article.platform_name} | Type: {article.source_type} | Date: {article.published}")
+            print(f"   Platform: {article.platform_name} | Type: {article.source} | Date: {article.published}")
 
         print("\n" + "-" * 40)
