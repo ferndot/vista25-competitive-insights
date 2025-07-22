@@ -37,7 +37,7 @@ def run_demo(companies: list[str], days_back: int = 7):
         print(f"\n🔍 Scanning {company}...")
 
         # Fetch news
-        articles = fetcher.fetch_google_news(company, days_back)
+        articles = fetcher.fetch_multiple_sources(company, days_back)
         print(f"   📰 Found {len(articles)} articles")
 
         # Extract signals
