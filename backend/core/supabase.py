@@ -1,5 +1,5 @@
 from supabase import create_client, Client
-from models.config import settings
+from core.config import settings
 
 
 def get_supabase_client() -> Client:

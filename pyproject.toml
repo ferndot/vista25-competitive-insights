@@ -1,17 +1,21 @@
 [project]
 dependencies = [
+  "email-validator>=2.2.0",
+  "fastapi>=0.116.1",
   "langchain-openai>=0.3.28",
   "langgraph>=0.5.4",
   "pydantic>=2.11.7",
+  "pydantic-settings>=2.10.1",
   "supabase>=2.17.0",
+  "uvicorn>=0.35.0",
+  "email-validator>=2.1.0",
   "httpx>=0.27.0",
   "python-dotenv==1.1.1",
   "loguru==0.7.3",
   "feedparser==6.0.11",
   "beautifulsoup4==4.13.4",
-  "pydantic-settings>=2.10.1",
 ]
-description = "Simplified competitive intelligence agent powered by LangGraph"
+description = "Add your description here"
 name = "vista25-competitive-insights"
 readme = "README.md"
 requires-python = ">=3.11"
