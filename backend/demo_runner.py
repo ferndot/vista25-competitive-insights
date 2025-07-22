@@ -25,7 +25,7 @@ def run_demo():
         # Extract signals
         for article in articles:
             signal = detector.extract_with_metadata(
-                company, article["text"], article["link"], article["published"]
+                company, article.text, article.link, article.published
             )
 
             if signal:

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 
-// List of features to display:
+// list of features to display:
 // - name: name of the feature
 // - description: description of the feature (can be any JSX)
 // - svg: icon of the feature

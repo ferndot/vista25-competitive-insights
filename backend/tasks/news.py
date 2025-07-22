@@ -1,6 +1,5 @@
 import os
 from datetime import datetime
-from typing import List
 from loguru import logger
 
 from models.job import JobStatusEnum
@@ -11,7 +10,7 @@ from agents.signal_detector import SignalDetector
 # In-memory storage for job status (in production, use Redis or database)
 job_status: dict[str, dict] = {}
 
-async def fetch_news_task(job_id: str, company_names: List[str], days_back: int):
+async def fetch_news_task(job_id: str, company_names: list[str], days_back: int):
     """Background task to fetch news and extract signals for multiple companies"""
     try:
         logger.info(f"Starting news fetch job {job_id} for {len(company_names)} companies")
@@ -43,9 +42,9 @@ async def fetch_news_task(job_id: str, company_names: List[str], days_back: int)
                     try:
                         signal = detector.extract_with_metadata(
                             company_name, 
-                            article["text"], 
-                            article["link"], 
-                            article["published"]
+                            article.text, 
+                            article.link, 
+                            article.published
                         )
                         
                         if signal:
