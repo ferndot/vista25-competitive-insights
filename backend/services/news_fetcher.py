@@ -5,14 +5,16 @@ from loguru import logger
 from data.base import DataSource
 from data.google_news import GoogleNewsSource
 from models.model import Result
+from services.deduplication import ResultDeduplicator
 
 
 class NewsFetcher:
     """Main class that orchestrates multiple data sources"""
 
-    def __init__(self, sources_list: List[DataSource]= None):
+    def __init__(self, sources_list: List[DataSource] = None):
         sources_list = sources_list or [GoogleNewsSource()]
         self.sources = { src.platform_id:src for src in sources_list}
+        self.deduplicator = ResultDeduplicator()
 
     def fetch_from_source(self, platform_id: str, company_name: str, days_back: int = 7) -> list[Result]:
         """Fetch data from a specific source"""
@@ -42,14 +44,9 @@ class NewsFetcher:
             else:
                 logger.warning(f"Unknown source: {source_name}")
 
-        # Deduplicate by title similarity
-        unique_articles = self._deduplicate_articles(all_articles)
-
-        # Sort by date, newest first
-        # unique_articles.sort(
-        #     key=lambda x: x.published_on, reverse=True
-        # )
-
+        # Deduplicate
+        unique_articles = self.deduplicator.deduplicate_results(all_articles)
+        
         return unique_articles
 
     def get_available_sources(self) -> list[str]:
@@ -64,22 +61,6 @@ class NewsFetcher:
         """Remove a data source"""
         if name in self.sources:
             del self.sources[name]
-
-    def _deduplicate_articles(self, articles: list[Result]) -> list[Result]:
-        """Remove duplicate articles based on title similarity"""
-
-        seen_titles = set()
-        unique = []
-
-        for article in articles:
-            # Simple deduplication by first 50 chars of title
-            title_key = article.title[:50].lower()
-
-            if title_key not in seen_titles:
-                seen_titles.add(title_key)
-                unique.append(article)
-
-        return unique
 
 
 # Test the fetcher

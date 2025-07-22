@@ -39,8 +39,9 @@ def run_demo(companies: list[str], days_back: int = 7):
         print(f"\n🔍 Scanning {company}...")
 
         # Fetch from all sources
+        print(f"   🔄 Fetching articles...")
         all_articles = fetcher.fetch_multiple_sources(company, days_back)
-        print(f"   📰 Found {len(all_articles)} total articles")
+        print(f"   📰 Found {len(all_articles)} unique articles (after deduplication)")
 
         # Show breakdown by source type if you want
         source_counts = {}
