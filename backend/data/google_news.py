@@ -1,21 +1,24 @@
 import time
 from datetime import datetime, timedelta
-from typing import List, Dict
 from urllib.parse import quote_plus
 
 import feedparser
 from loguru import logger
 
+from models.model import DataSourceItem, SourceType
 from .base import DataSource
 
 
 class GoogleNewsSource(DataSource):
     """Google News RSS data source"""
     
-    def __init__(self):
-        super().__init__("Google News")
+    platform_name = "Google News"
+    platform_id = "google_news"
     
-    def fetch(self, company_name: str, days_back: int = 7) -> List[Dict]:
+    def __init__(self):
+        super().__init__()
+    
+    def fetch(self, company_name: str, days_back: int = 7) -> list[DataSourceItem]:
         """Fetch recent news for a company from Google News RSS"""
 
         # Build search query with relevant business signals
@@ -82,15 +85,16 @@ class GoogleNewsSource(DataSource):
                 # Extract clean text from summary
                 summary = self._clean_html(entry.get("summary", ""))
 
-                article = {
-                    "title": entry.get("title", "No title"),
-                    "link": entry.get("link", ""),
-                    "published": entry.get("published", "Unknown date"),
-                    "pub_date": pub_date,
-                    "source": self._extract_source(entry.get("title", "")),
-                    "source_type": "news",
-                    "text": f"{entry.get('title', '')}. {summary}",
-                }
+                article = DataSourceItem(
+                    title=entry.get("title", "No title"),
+                    link=entry.get("link", ""),
+                    published=entry.get("published", "Unknown date"),
+                    published_on=pub_date,
+                    source_type=SourceType.news,
+                    text=f"{entry.get('title', '')}. {summary}",
+                    platform=self.platform_id,
+                    platform_name=self.platform_name
+                )
 
                 articles.append(article)
 

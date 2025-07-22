@@ -1,7 +1,5 @@
 import os
 
-from langchain_openai import ChatOpenAI
-from typing import Optional
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -28,7 +26,7 @@ class SignalDetector:
         # ).with_structured_output(Signal)
         self.llm = azure_chat_model().with_structured_output(Signal)
 
-    def extract(self, company_name: str, text: str) -> Optional[Signal]:
+    def extract(self, company_name: str, text: str) -> Signal | None:
         """Extract signal from text about a company"""
 
         prompt = f"""
@@ -67,9 +65,9 @@ class SignalDetector:
         self,
         company_name: str,
         text: str,
-        source_url: Optional[str] = None,
-        article_date: Optional[str] = None,
-    ) -> Optional[SignalWithMetadata]:
+        source_url: str | None = None,
+        article_date: str | None = None,
+    ) -> SignalWithMetadata | None:
         """Extract signal and add metadata"""
 
         signal = self.extract(company_name, text)

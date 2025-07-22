@@ -46,7 +46,7 @@ def run_demo(companies: list[str], days_back: int = 7):
         for article in articles[:10]:  # Limit to 10 per company for demo
             try:
                 # Extract signal
-                signal = detector.extract(company, article["text"])
+                signal = detector.extract(company, article.text)
 
                 if signal:
                     # Convert to simple dict for Supabase
@@ -59,7 +59,7 @@ def run_demo(companies: list[str], days_back: int = 7):
                         "confidence": signal.confidence.value,
                         "person": signal.person,
                         "amount": signal.amount,
-                        "source_url": article.get("link"),
+                        "source_url": article.link,
                         "detected_at": datetime.now().isoformat(),
                     }
 

@@ -1,10 +1,10 @@
-from datetime import datetime
-
 from loguru import logger
 
 from data.base import DataSource
 from data.google_news import GoogleNewsSource
 from core.config import settings
+from models.model import DataSourceItem
+
 
 class NewsFetcher:
     """Main class that orchestrates multiple data sources"""
@@ -14,7 +14,7 @@ class NewsFetcher:
             "google_news": GoogleNewsSource(),
         }
 
-    def fetch_from_source(self, source_name: str, company_name: str, days_back: int = 7) -> list[dict]:
+    def fetch_from_source(self, source_name: str, company_name: str, days_back: int = 7) -> list[DataSourceItem]:
         """Fetch data from a specific source"""
         if source_name not in self.sources:
             logger.error(f"Unknown source: {source_name}")
@@ -27,7 +27,7 @@ class NewsFetcher:
         company_name: str, 
         days_back: int = 7, 
         sources: list[str] | None = None
-    ) -> list[dict]:
+    ) -> list[DataSourceItem]:
         """Fetch from multiple sources and deduplicate"""
 
         if sources is None:
@@ -47,7 +47,7 @@ class NewsFetcher:
 
         # Sort by date, newest first
         unique_articles.sort(
-            key=lambda x: x.get("pub_date", datetime.min), reverse=True
+            key=lambda x: x.published_on, reverse=True
         )
 
         return unique_articles
@@ -65,7 +65,7 @@ class NewsFetcher:
         if name in self.sources:
             del self.sources[name]
 
-    def _deduplicate_articles(self, articles: list[dict]) -> list[dict]:
+    def _deduplicate_articles(self, articles: list[DataSourceItem]) -> list[DataSourceItem]:
         """Remove duplicate articles based on title similarity"""
 
         seen_titles = set()
@@ -73,7 +73,7 @@ class NewsFetcher:
 
         for article in articles:
             # Simple deduplication by first 50 chars of title
-            title_key = article["title"][:50].lower()
+            title_key = article.title[:50].lower()
 
             if title_key not in seen_titles:
                 seen_titles.add(title_key)
@@ -98,8 +98,8 @@ if __name__ == "__main__":
         print(f"\n--- Google News ---")
         google_articles = fetcher.fetch_from_source("google_news", company, days_back=3)
         for article in google_articles[:3]:
-            print(f"📰 {article['title'][:80]}...")
-            print(f"   Source: {article['source']} | Type: {article['source_type']}")
+            print(f"📰 {article.title[:80]}...")
+            print(f"   Platform: {article.platform_name} | Type: {article.source_type}")
 
         # Test combined sources
         print(f"\n--- All Sources Combined ---")
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
         print(f"Total articles found: {len(all_articles)}")
         for article in all_articles[:5]:
-            print(f"📄 {article['title'][:80]}...")
-            print(f"   Source: {article['source']} | Type: {article['source_type']} | Date: {article['published']}")
+            print(f"📄 {article.title[:80]}...")
+            print(f"   Platform: {article.platform_name} | Type: {article.source_type} | Date: {article.published}")
 
         print("\n" + "-" * 40)

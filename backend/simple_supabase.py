@@ -4,8 +4,6 @@ No migrations, just straightforward table operations
 """
 
 import os
-from typing import List, Dict, Optional
-from datetime import datetime
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
@@ -73,7 +71,7 @@ CREATE INDEX IF NOT EXISTS idx_detected ON signals(detected_at DESC);
 
         return sql
 
-    def save_signal(self, signal_data: Dict) -> Dict:
+    def save_signal(self, signal_data: dict) -> dict:
         """Save a signal to Supabase"""
 
         try:
@@ -83,7 +81,7 @@ CREATE INDEX IF NOT EXISTS idx_detected ON signals(detected_at DESC);
             print(f"❌ Error saving signal: {e}")
             return {}
 
-    def get_recent_signals(self, limit: int = 50) -> List[Dict]:
+    def get_recent_signals(self, limit: int = 50) -> list[dict]:
         """Get recent signals"""
 
         try:
@@ -99,7 +97,7 @@ CREATE INDEX IF NOT EXISTS idx_detected ON signals(detected_at DESC);
             print(f"❌ Error fetching signals: {e}")
             return []
 
-    def get_company_signals(self, company_name: str) -> List[Dict]:
+    def get_company_signals(self, company_name: str) -> list[dict]:
         """Get all signals for a specific company"""
 
         try:
