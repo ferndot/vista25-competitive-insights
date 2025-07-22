@@ -22,17 +22,10 @@ def fetch_company_news(params: NewsQueryParams) -> Dict[str, Any]:
     try:
         fetcher = NewsFetcher()
         
-        # Get available sources
-        available_sources = fetcher.get_available_sources()
-        
-        # Use specified sources or all available
-        sources_to_use = params.sources or available_sources
-        
         # Fetch articles
         articles = fetcher.fetch_multiple_sources(
             company_name=params.company_name,
             days_back=params.days_back,
-            sources=sources_to_use
         )
         
         # Limit articles if specified
@@ -61,7 +54,6 @@ def fetch_company_news(params: NewsQueryParams) -> Dict[str, Any]:
             "success": True,
             "company": params.company_name,
             "articles_found": len(article_data),
-            "sources_used": sources_to_use,
             "articles": article_data,
             "metadata": {
                 "fetch_time": datetime.now().isoformat(),

@@ -93,8 +93,8 @@ async def main():
     print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("")
     
-    default_companies = ["Salesforce", "Databricks", "Stripe", "OpenAI", "Figma"]
-    days_back = 7
+    default_companies = ["Microsoft", "Salesforce", "Databricks", "Stripe", "OpenAI", "Figma"]
+    days_back = 30
     
     try:
         result = await run_agent(

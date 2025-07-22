@@ -174,7 +174,7 @@ class SECFilingsSource(DataSource):
                 link=filing.get('link', ''),
                 published=filing.get('published', ''),
                 published_on=filing_date,
-                source=SourceType.regulatory,  # SEC is regulatory source
+                source=SourceType.regulatory,
                 text=enhanced_text,
                 platform=self.platform_id,
                 platform_name=self.platform_name
