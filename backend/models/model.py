@@ -170,3 +170,19 @@ class SignalWithMetadata(Signal):
     source_url: str | None = None
     detected_at: datetime = Field(default_factory=datetime.now)
     article_date: datetime | None = None
+
+
+class DeduplicationResult(BaseModel):
+    """Result of comparing two articles for deduplication"""
+    
+    is_duplicate: bool = Field(
+        description="Whether the two articles are reporting on the same underlying event"
+    )
+    confidence: float = Field(
+        description="Confidence score from 0.0 to 1.0 for this determination",
+        ge=0.0,
+        le=1.0
+    )
+    reason: str = Field(
+        description="Brief explanation of why they are or aren't the same event"
+    )
