@@ -103,12 +103,12 @@ const NotificationToast = ({ event, priority = 'normal', onDismiss }) => {
             <div className="flex items-center gap-2 mb-2">
               {event.impact && (
                 <div className={`badge badge-sm ${getImpactBadgeClass(event.impact)}`}>
-                  {event.impact} impact
+                  {event.impact}
                 </div>
               )}
               {event.confidence && (
                 <div className="badge badge-sm badge-outline">
-                  {event.confidence} confidence
+                  {event.confidence}
                 </div>
               )}
             </div>

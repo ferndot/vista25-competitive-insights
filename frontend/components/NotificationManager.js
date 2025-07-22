@@ -51,7 +51,7 @@ class NotificationManager {
       return null;
     }
 
-    console.log('🚨 Critical Alert:', event.company_name, '-', event.title, `(${event.signal_type}, ${event.impact} impact)`);
+    console.log('🚨 Critical Alert:', event.company_name, '-', event.title, `(${event.signal_type}, ${event.impact})`);
 
     // Play sound for critical events
     if (this.settings.soundEnabled) {
@@ -156,9 +156,9 @@ class NotificationManager {
 
   getNotificationDuration(priority) {
     const durationMap = {
-      critical: this.settings.persistCritical ? 0 : 8000, // 0 = never auto-dismiss
-      important: 6000,
-      normal: 4000,
+      critical: this.settings.persistCritical ? 0 : 10000, // 0 = never auto-dismiss
+      important: 10000,
+      normal: 8000,
     };
     return durationMap[priority];
   }
