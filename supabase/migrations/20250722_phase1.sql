@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS public.signals (
     confidence TEXT,
     person TEXT,
     amount TEXT,
+    source TEXT,
     source_url TEXT,
     detected_at TIMESTAMP DEFAULT NOW()
 );
@@ -59,9 +60,16 @@ CREATE INDEX IF NOT EXISTS idx_company ON public.signals(company_name);
 CREATE INDEX IF NOT EXISTS idx_detected ON public.signals(detected_at DESC);
 CREATE INDEX IF NOT EXISTS idx_impact ON public.signals(impact);
 CREATE INDEX IF NOT EXISTS idx_signal_type ON public.signals(signal_type);
+CREATE INDEX IF NOT EXISTS idx_source ON public.signals(source);
 
 -- ===============================================
 -- SECURITY SETTINGS
 -- ===============================================
 -- Disable row‑level security for hackathon speed
-ALTER TABLE public.signals DISABLE ROW LEVEL SECURITY; 
+ALTER TABLE public.signals DISABLE ROW LEVEL SECURITY;
+
+-- ===============================================
+-- REAL-TIME CONFIGURATION
+-- ===============================================
+-- Enable real-time subscriptions on the signals table
+ALTER PUBLICATION supabase_realtime ADD TABLE public.signals;

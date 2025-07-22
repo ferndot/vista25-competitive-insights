@@ -8,6 +8,7 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
 import { Tooltip } from "react-tooltip";
 import config from "@/config";
+import GlobalNotificationProvider from "./GlobalNotificationProvider";
 
 // Crisp customer chat support:
 // This component is separated from ClientLayout because it needs to be wrapped with <SessionProvider> to use useSession() hook
@@ -66,9 +67,10 @@ const CrispChat = () => {
 // 2. Toaster: Show Success/Error messages anywhere from the app with toast()
 // 3. Tooltip: Show tooltips if any JSX elements has these 2 attributes: data-tooltip-id="tooltip" data-tooltip-content=""
 // 4. CrispChat: Set Crisp customer chat support (see above)
+// 5. GlobalNotificationProvider: Handle real-time notifications across the app
 const ClientLayout = ({ children }) => {
   return (
-    <>
+    <GlobalNotificationProvider>
       {/* Show a progress bar at the top when navigating between pages */}
       <NextTopLoader color={config.colors.main} showSpinner={false} />
 
@@ -90,7 +92,7 @@ const ClientLayout = ({ children }) => {
 
       {/* Set Crisp customer chat support */}
       <CrispChat />
-    </>
+    </GlobalNotificationProvider>
   );
 };
 

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/libs/supabase/client';
-import toast from 'react-hot-toast';
+import NewDataBadge from '@/components/NewDataBadge';
+import SignalModal from '@/components/SignalModal';
 
 export default function CompetitorsPage() {
   const [signals, setSignals] = useState([]);
@@ -11,6 +12,8 @@ export default function CompetitorsPage() {
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [error, setError] = useState(null);
+  const [selectedSignal, setSelectedSignal] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -51,36 +54,10 @@ export default function CompetitorsPage() {
     // Set up polling every 60 seconds
     const interval = setInterval(fetchData, 60000);
     
-    // Set up realtime subscription for new signals
-    const supabase = createClient();
-    const channel = supabase.channel('public:signals');
-    
-    channel.on(
-      'postgres_changes',
-      { 
-        event: 'INSERT', 
-        schema: 'public', 
-        table: 'signals'
-      },
-      (payload) => {
-        const signal = payload.new;
-        
-        // Show toast for new signals
-        toast.success(`New signal detected: ${signal.title}`, {
-          duration: 5000,
-          position: 'top-right',
-        });
-        
-        // Refresh data to show the new signal
-        fetchData();
-      }
-    ).subscribe();
+    // Note: Real-time notifications are now handled globally by GlobalNotificationProvider
     
     return () => {
       clearInterval(interval);
-      if (channel) {
-        supabase.removeChannel(channel);
-      }
     };
   }, []);
 
@@ -170,14 +147,22 @@ export default function CompetitorsPage() {
           <p className="text-base-content/70">
             Real-time competitive intelligence and market signals.
           </p>
-          <div className="flex gap-4 items-center mt-4">
-            {lastUpdated && (
-              <p className="text-sm text-base-content/50">
-                Last updated: {lastUpdated.toLocaleTimeString()}
-              </p>
-            )}
-            <div className="badge badge-info">
-              {filteredSignals.length} Signals
+          <div className="flex gap-4 items-center mt-4 flex-wrap">
+            <div className="flex items-center gap-4">
+              {lastUpdated && (
+                <p className="text-sm text-base-content/50">
+                  Last updated: {lastUpdated.toLocaleTimeString()}
+                </p>
+              )}
+              <div className="badge badge-info">
+                {filteredSignals.length} Signals
+              </div>
+              
+              {/* Simple new data indicator */}
+              <NewDataBadge 
+                onRefresh={fetchData} 
+                lastUpdated={lastUpdated} 
+              />
             </div>
           </div>
         </div>
@@ -227,43 +212,41 @@ export default function CompetitorsPage() {
               <table className="table table-zebra w-full">
                 <thead>
                   <tr>
-                    <th>Date</th>
                     <th>Company</th>
+                    <th>Source</th>
                     <th>Signal Type</th>
                     <th>Title</th>
                     <th>Impact</th>
                     <th>Action</th>
-                    <th>Confidence</th>
-                    <th>Details</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredSignals.map((signal) => (
-                    <tr key={signal.id} className="hover">
-                      <td className="whitespace-nowrap text-sm">
-                        {formatDate(signal.detected_at)}
-                      </td>
+                    <tr 
+                      key={signal.id} 
+                      className="hover cursor-pointer"
+                      onClick={() => {
+                        setSelectedSignal(signal);
+                        setShowModal(true);
+                      }}
+                    >
                       <td className="font-medium">
                         {signal.company_name}
+                      </td>
+                      <td>
+                        <div className="badge badge-ghost text-xs">
+                          {signal.source || 'Unknown'}
+                        </div>
                       </td>
                       <td>
                         <div className="badge badge-outline">
                           {signal.signal_type}
                         </div>
                       </td>
-                      <td>
-                        {signal.source_url ? (
-                          <a
-                            href={signal.source_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="link link-primary font-medium hover:link-accent"
-                          >
-                            {signal.title}
-                          </a>
-                        ) : (
-                          <span className="font-medium">{signal.title}</span>
-                        )}
+                      <td className="max-w-md">
+                        <div className="font-medium truncate">
+                          {signal.title}
+                        </div>
                       </td>
                       <td>
                         <div className={`badge ${getImpactColor(signal.impact)}`}>
@@ -274,21 +257,6 @@ export default function CompetitorsPage() {
                         <div className="line-clamp-2 text-sm">
                           {signal.action}
                         </div>
-                      </td>
-                      <td>
-                        {signal.confidence && (
-                          <div className={`badge badge-sm ${getConfidenceColor(signal.confidence)}`}>
-                            {signal.confidence}
-                          </div>
-                        )}
-                      </td>
-                      <td className="text-sm text-base-content/70">
-                        {signal.person && (
-                          <div>👤 {signal.person}</div>
-                        )}
-                        {signal.amount && (
-                          <div>💰 {signal.amount}</div>
-                        )}
                       </td>
                     </tr>
                   ))}
@@ -312,6 +280,16 @@ export default function CompetitorsPage() {
           </div>
         )}
       </div>
+
+      {/* Signal Details Modal */}
+      <SignalModal
+        signal={selectedSignal}
+        isOpen={showModal}
+        onClose={() => {
+          setShowModal(false);
+          setSelectedSignal(null);
+        }}
+      />
     </div>
   );
 } 

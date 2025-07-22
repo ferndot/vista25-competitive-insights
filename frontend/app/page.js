@@ -1,4 +1,5 @@
-import { Suspense } from 'react'
+'use client';
+
 import Link from "next/link";
 
 export default function Home() {
@@ -18,7 +19,7 @@ export default function Home() {
             <p className="text-lg opacity-80 leading-relaxed max-w-md">
               Get instant alerts on competitor activities including layoffs, acquisitions, funding rounds, and executive changes. Stay ahead with automated intelligence.
             </p>
-            <Link 
+                        <Link 
               href="/competitors" 
               className="btn btn-primary btn-wide gap-2"
             >
