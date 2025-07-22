@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api import auth
+from api import auth, news
 from core.config import settings
 
 app = FastAPI(title="Competitive Insights API")
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(news.router, prefix="/api/news", tags=["news"])
 
 
 @app.get("/")
