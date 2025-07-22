@@ -1,14 +1,12 @@
 FROM node:24-alpine
 
-# Set working directory
-WORKDIR /app
-
 # Install dependencies
 COPY package.json package-lock.json* ./
 RUN npm install
 
-# Copy the rest of the code
-COPY . .
+# Copy the frontend app code
+ADD . /app
+WORKDIR /app
 
 # Expose port
 EXPOSE 3000
