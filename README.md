@@ -23,18 +23,22 @@ Problem statement:
 **Run the Project:**
 
 1. Create a new .env file following the structure of .env.example
-2. Run the local servers using docker compose
+2. Run the frontend using docker compose
 
 ```bash
 docker-compose up
 ```
 
+3. Run the agent to populate data
+
+```bash
+uv run python backend/main.py
+```
+
 **Links:**
 
 - Frontend: http://localhost:3000
-- Backend: http://localhost:8000
-- Docs: http://localhost:8000/docs
 
 ## Deployment
 
-This project is configured for automatic deployment to Heroku (backend) and Vercel (frontend).
+This project is configured for automatic deployment to Vercel (frontend).
