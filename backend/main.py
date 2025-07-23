@@ -6,6 +6,7 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
+from backend.data.rapid_api import RapidAPIJobsSource
 from core.config import settings
 from agents.signal_detector import SignalDetector
 from data.google_news import GoogleNewsSource
@@ -24,7 +25,7 @@ def run_demo(companies: list[str], days_back: int = 7):
 
     # Initialize components
     detector = SignalDetector(api_key=os.environ["OPENAI_API_KEY"])
-    fetcher = NewsFetcher(sources_list=[GoogleNewsSource(), SECFilingsSource()])
+    fetcher = NewsFetcher(sources_list=[GoogleNewsSource(), SECFilingsSource(), RapidAPIJobsSource()])
     db = SimpleSupabase()
 
     # Check database is ready
