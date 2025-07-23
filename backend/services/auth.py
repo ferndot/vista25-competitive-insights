@@ -1,6 +1,13 @@
-from fastapi import HTTPException
 from core.supabase import supabase_client
 from models.auth import UserCreate, UserLogin, UserResponse, TokenResponse
+
+
+class AuthError(Exception):
+    """Custom exception for authentication errors"""
+    def __init__(self, message: str, status_code: int = 400):
+        self.message = message
+        self.status_code = status_code
+        super().__init__(self.message)
 
 
 class AuthService:
@@ -18,7 +25,7 @@ class AuthService:
             )
 
             if not response.user:
-                raise HTTPException(status_code=400, detail="Registration failed")
+                raise AuthError("Registration failed", 400)
 
             user_response = UserResponse(
                 id=response.user.id,
@@ -31,7 +38,7 @@ class AuthService:
                 access_token=response.session.access_token, user=user_response
             )
         except Exception as e:
-            raise HTTPException(status_code=400, detail=str(e))
+            raise AuthError(str(e), 400)
 
     async def login_user(self, user_data: UserLogin) -> TokenResponse:
         try:
@@ -40,7 +47,7 @@ class AuthService:
             )
 
             if not response.user:
-                raise HTTPException(status_code=401, detail="Invalid credentials")
+                raise AuthError("Invalid credentials", 401)
 
             user_response = UserResponse(
                 id=response.user.id,
@@ -53,14 +60,14 @@ class AuthService:
                 access_token=response.session.access_token, user=user_response
             )
         except Exception as e:
-            raise HTTPException(status_code=401, detail=str(e))
+            raise AuthError(str(e), 401)
 
     async def get_current_user(self, access_token: str) -> UserResponse:
         try:
             response = self.client.auth.get_user(access_token)
 
             if not response.user:
-                raise HTTPException(status_code=401, detail="Invalid token")
+                raise AuthError("Invalid token", 401)
 
             return UserResponse(
                 id=response.user.id,
@@ -69,7 +76,7 @@ class AuthService:
                 created_at=response.user.created_at,
             )
         except Exception as e:
-            raise HTTPException(status_code=401, detail=str(e))
+            raise AuthError(str(e), 401)
 
 
 auth_service = AuthService()
