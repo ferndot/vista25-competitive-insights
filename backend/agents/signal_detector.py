@@ -59,8 +59,8 @@ class SignalDetector:
         try:
             signal = self.llm.invoke(prompt)
 
-            # Filter out low-confidence or no-signal results
-            if signal.type == SignalType.none or signal.confidence == Confidence.low:
+            # Filter out no-signal results
+            if signal.type == SignalType.none:
                 return None
 
             return signal
